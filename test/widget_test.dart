@@ -17,6 +17,9 @@ void main() {
 
     print(tester.allWidgets);
 
+    final textWidget = tester.widget<Widget>(
+        find.text('You have pushed the button this many times:'));
+
     // Verify that our counter starts at 0.
     expect(
         find.ancestor(
@@ -24,7 +27,10 @@ void main() {
           matching: find.byType(Scaffold),
         ),
         findsOneWidget); //1-1, 2-4
-    expect(find.text('0'), findsOneWidget); //1-2, 2-4
+    expect(
+        find.byElementPredicate(
+            (widget) => widget is SingleChildRenderObjectElement),
+        findsWidgets); //1-2, 2-5
     expect(find.byElementType(MultiChildRenderObjectElement),
         findsWidgets); //1-3, 2-5
     expect(find.byIcon(Icons.add), findsOneWidget); //1-4, 2-4
@@ -32,6 +38,24 @@ void main() {
     expect(find.bySemanticsLabel("Counting value"), findsOneWidget); //1-6, 2-4
     expect(find.byTooltip("Testing w/ tooltip"), findsOneWidget); //1-7, 2-4
     expect(find.byType(Icon), findsOneWidget); //1-8, 2-4
+    expect(find.byWidget(textWidget), findsOneWidget); //1-9, 2-4
+    expect(
+        find.byWidgetPredicate((widget) =>
+            widget is FloatingActionButton && widget.tooltip == 'Increment'),
+        findsOneWidget); //1-10, 2-4
+    expect(
+        find.descendant(
+          of: find.byType(Column),
+          matching: find.byType(Tooltip),
+        ),
+        findsOneWidget); //1-11, 2-4
+    expect(find.text('0'), findsOneWidget); //1-12, 2-4
+    expect(
+        find.widgetWithIcon(RaisedButton, Icons.add), findsNothing); //1-13, 2-3
+    expect(
+        find.widgetWithText(
+            Scaffold, "You have pushed the button this many times:"),
+        findsOneWidget); //1-14, 2-4
     expect(find.text('1'), findsNothing); //1-2, 2-3
 
     // Tap the '+' icon and trigger a frame.
@@ -45,7 +69,7 @@ void main() {
 }
 
 /* 
-1 - # Common Finders (ou Finder usado acima)
+1 - # Common Finders (ou qualquer parâmetro do tipo Finder usado acima)
 
 #
 1 ancestor
