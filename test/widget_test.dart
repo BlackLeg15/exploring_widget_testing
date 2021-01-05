@@ -15,13 +15,13 @@ void main() {
     // Build our app and trigger a frame.
     await tester.pumpWidget(MyApp());
 
-    print(tester.allWidgets);
+    //print(tester.allWidgets);
 
     final textWidget = tester.widget<Widget>(
         find.text('You have pushed the button this many times:'));
 
-    // Verify that our counter starts at 0.
-    expect(
+    // Using all finders
+    /* expect(
         find.ancestor(
           of: find.byType(FloatingActionButton),
           matching: find.byType(Scaffold),
@@ -55,8 +55,10 @@ void main() {
     expect(
         find.widgetWithText(
             Scaffold, "You have pushed the button this many times:"),
-        findsOneWidget); //1-14, 2-4
-    expect(find.text('1'), findsNothing); //1-2, 2-3
+        findsOneWidget); //1-14, 2-4 */
+
+    //Using all matchers
+    expect(find.byType(Row), anything); //1-8, 2-1
 
     // Tap the '+' icon and trigger a frame.
     await tester.tap(find.byIcon(Icons.add)); //1-4,
