@@ -26,7 +26,10 @@ class MyApp extends StatelessWidget {
         // closer together (more dense) than on mobile platforms.
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: MyHomePage(title: 'Flutter Demo Home Page'),
+      home: MyHomePage(
+        title: 'Flutter Demo Home Page',
+        key: Key("Teste"),
+      ),
     );
   }
 }
@@ -103,6 +106,10 @@ class _MyHomePageState extends State<MyHomePage> {
             Text(
               '$_counter',
               style: Theme.of(context).textTheme.headline4,
+              semanticsLabel: "Counting value",
+            ),
+            Tooltip(
+              message: "Testing w/ tooltip",
             ),
           ],
         ),
