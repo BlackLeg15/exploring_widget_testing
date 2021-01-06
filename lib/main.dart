@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 
 void main() {
   runApp(MyApp());
@@ -119,6 +120,12 @@ class _MyHomePageState extends State<MyHomePage> {
         tooltip: 'Increment',
         child: Icon(Icons.add),
       ), // This trailing comma makes auto-formatting nicer for build methods.
+      bottomSheet: Material(
+        key: Key("1-8, 2-2"),
+        type: MaterialType.transparency,
+        //child: const SizedBox(width: 100.0, height: 100.0),
+        clipBehavior: Clip.hardEdge,
+      ),
     );
   }
 }

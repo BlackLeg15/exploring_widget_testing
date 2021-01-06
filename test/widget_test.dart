@@ -15,10 +15,22 @@ void main() {
     // Build our app and trigger a frame.
     await tester.pumpWidget(MyApp());
 
+/*     final GlobalKey materialKey = GlobalKey();
+    await tester.pumpWidget(
+      Material(
+        key: materialKey,
+        type: MaterialType.transparency,
+        child: const SizedBox(width: 100.0, height: 100.0),
+        clipBehavior: Clip.antiAlias,
+      ),
+    );
+
+    expect(find.byKey(materialKey), clipsWithBoundingRect); */
+
     //print(tester.allWidgets);
 
-    final textWidget = tester.widget<Widget>(
-        find.text('You have pushed the button this many times:'));
+    /* final textWidget = tester.widget<Widget>(
+        find.text('You have pushed the button this many times:')); */
 
     // Using all finders
     /* expect(
@@ -59,14 +71,18 @@ void main() {
 
     //Using all matchers
     expect(find.byType(Row), anything); //1-8, 2-1
+    expect(find.byKey(Key("1-8, 2-2")), clipsWithBoundingRect); //1-5, 2-2
+    expect(
+        find.widgetWithIcon(RaisedButton, Icons.add), findsNothing); //1-13, 2-3
+    expect(find.byIcon(Icons.add), findsOneWidget); //1-4, 2-4
 
     // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add)); //1-4,
-    await tester.pump();
+    /* await tester.tap(find.byIcon(Icons.add)); //1-4,
+    await tester.pump(); */
 
     // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing); //1-2, 2-3
-    expect(find.text('1'), findsOneWidget); //1-2, 2-4
+    /* expect(find.text('0'), findsNothing); //1-2, 2-3
+    expect(find.text('1'), findsOneWidget); //1-2, 2-4 */
   });
 }
 
