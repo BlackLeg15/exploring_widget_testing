@@ -15,7 +15,7 @@ void main() {
     // Build our app and trigger a frame.
     await tester.pumpWidget(MyApp());
 
-/*     final GlobalKey materialKey = GlobalKey();
+/*    final GlobalKey materialKey = GlobalKey();
     await tester.pumpWidget(
       Material(
         key: materialKey,
@@ -27,13 +27,11 @@ void main() {
 
     expect(find.byKey(materialKey), clipsWithBoundingRect); */
 
-    //print(tester.allWidgets);
-
     /* final textWidget = tester.widget<Widget>(
-        find.text('You have pushed the button this many times:')); */
+        find.text('You have pushed the button this many times:'));
 
     // Using all finders
-    /* expect(
+    expect(
         find.ancestor(
           of: find.byType(FloatingActionButton),
           matching: find.byType(Scaffold),
@@ -75,16 +73,30 @@ void main() {
     expect(
         find.widgetWithIcon(RaisedButton, Icons.add), findsNothing); //1-13, 2-3
     expect(find.byIcon(Icons.add), findsOneWidget); //1-4, 2-4
+    expect(find.byType(Text), findsNWidgets(3)); //1-8, 2-5
+    //2-6*
+    expect(find.byKey(Key("1-8, 2-7")), hasNoImmediateClip); //1-5, 2-7
+    expect(find.byType(Tooltip), hasOneLineDescription); //1-5, 2-8
+    expect(Object(), isNot(hasOneLineDescription)); //2-8
+    expect(
+        await tester.runAsync<int>(() async => testForArgumentError()), isNull);
+    expect(tester.takeException(),
+        isArgumentError); //2-9 Captura o erro jogado pela função acima
+    expect(false, isBrowser); //1-5, 2-10
+
+    print(Tooltip(message: "q"));
 
     // Tap the '+' icon and trigger a frame.
-    /* await tester.tap(find.byIcon(Icons.add)); //1-4,
-    await tester.pump(); */
+    await tester.tap(find.byIcon(Icons.add)); //1-4,
+    await tester.pump();
 
     // Verify that our counter has incremented.
-    /* expect(find.text('0'), findsNothing); //1-2, 2-3
-    expect(find.text('1'), findsOneWidget); //1-2, 2-4 */
+    expect(find.text('0'), findsNothing); //1-2, 2-3
+    expect(find.text('1'), findsOneWidget); //1-2, 2-4
   });
 }
+
+int testForArgumentError() => throw ArgumentError();
 
 /* 
 1 - # Common Finders (ou qualquer parâmetro do tipo Finder usado acima)
@@ -113,32 +125,37 @@ void main() {
 3 findsNothing
 4 findsOneWidget
 5 findsWidgets
-hasAGoodToStringDeep
-hasNoImmediateClip
-hasOneLineDescription
-isArgumentError
-isBrowser
-isCastError
-isConcurrentModificationError
-isCyclicInitializationError
-isEmpty
-isException
-isFalse
-isFormatException
-isInCard
-isList
-isMap
-isNaN
-isNegative
-isNonNegative
-isNonPositive
-isNonZero
-isNoSuchMethodError
-isNotEmpty
-isNotInCard
-isNotNaN
-isNotNull
-isNull
+6* hasAGoodToStringDeep -> Esse matcher é bem específico
+    Doc aqui: https://api.flutter.dev/flutter/flutter_test/hasAGoodToStringDeep-constant.html
+    Exemplo de uso aqui: https://github.com/flutter/flutter/blob/099ae9b4179467b5cc9a6a4be19f75763a6c3d28/packages/flutter_test/test/matchers_test.dart
+    Está anotado na pasta Widget Test o porquê de ser necessário o transparency e o hardEdge
+    Existem vários outros exemplos nesse repositório do Flutter
+7 hasNoImmediateClip
+8 hasOneLineDescription
+    Doc aqui: https://api.flutter.dev/flutter/flutter_test/hasOneLineDescription-constant.html
+9 isArgumentError
+10 isBrowser
+11 isCastError
+12 isConcurrentModificationError
+13 isCyclicInitializationError
+14 isEmpty
+15 isException
+16 isFalse
+17 isFormatException
+18 isInCard
+19 isList
+20 isMap
+21 isNaN
+22 isNegative
+23 isNonNegative
+24 isNonPositive
+25 isNonZero
+26isNoSuchMethodError
+27 isNotEmpty
+28 isNotInCard
+29 isNotNaN
+30 isNotNull
+31 isNull
 isNullThrownError
 isOffstage
 isOnstage
