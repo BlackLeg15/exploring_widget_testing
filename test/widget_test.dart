@@ -78,13 +78,29 @@ void main() {
     expect(find.byKey(Key("1-8, 2-7")), hasNoImmediateClip); //1-5, 2-7
     expect(find.byType(Tooltip), hasOneLineDescription); //1-5, 2-8
     expect(Object(), isNot(hasOneLineDescription)); //2-8
+
     expect(
         await tester.runAsync<int>(() async => testForArgumentError()), isNull);
     expect(tester.takeException(),
         isArgumentError); //2-9 Captura o erro jogado pela função acima
-    expect(false, isBrowser); //1-5, 2-10
 
-    print(Tooltip(message: "q"));
+    expect(true, isNot(isBrowser)); //2-10
+
+    expect(await tester.runAsync<List<String>>(() async => testForCastError()),
+        isNull);
+    expect(tester.takeException(), isA<TypeError>()); //2-11
+
+    expect(
+        await tester
+            .runAsync<int>(() async => testForConcurrentModificationError()),
+        isNull);
+    expect(tester.takeException(), isConcurrentModificationError); //2-12
+    //2-13
+    expect('', isEmpty); //2-14
+    expect(<int>[], isEmpty); //2-14
+
+    expect(await tester.runAsync<int>(() async => testForException()), isNull);
+    expect(tester.takeException(), isException); //2-15
 
     // Tap the '+' icon and trigger a frame.
     await tester.tap(find.byIcon(Icons.add)); //1-4,
@@ -96,7 +112,18 @@ void main() {
   });
 }
 
-int testForArgumentError() => throw ArgumentError();
+int testForArgumentError() {
+  final list = <int>[1, 2];
+  return list[2];
+}
+
+List<String> testForCastError() {
+  final list = <int>[1, 2];
+  return list.map((e) => e - 1).cast<String>();
+}
+
+int testForConcurrentModificationError() => throw ConcurrentModificationError();
+int testForException() => (1 ~/ 0);
 
 /* 
 1 - # Common Finders (ou qualquer parâmetro do tipo Finder usado acima)
@@ -135,9 +162,12 @@ int testForArgumentError() => throw ArgumentError();
     Doc aqui: https://api.flutter.dev/flutter/flutter_test/hasOneLineDescription-constant.html
 9 isArgumentError
 10 isBrowser
-11 isCastError
+11 isCastError (deprecated) -> isA<TypeError>()
 12 isConcurrentModificationError
-13 isCyclicInitializationError
+    Issue relacionada: https://github.com/flutter/flutter/issues/59601
+13 isCyclicInitializationError 
+    Doc: https://api.flutter.dev/flutter/dart-core/CyclicInitializationError-class.html
+    Não achei muito sobre
 14 isEmpty
 15 isException
 16 isFalse
