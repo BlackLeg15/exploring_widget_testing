@@ -30,7 +30,6 @@ dependencies:
   cupertino_icons: 
 
 dev_dependencies:
-  integration_test:
   flutter_test:
     sdk: flutter
 

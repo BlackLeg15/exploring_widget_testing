@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
@@ -55,6 +56,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
+  bool visible = true;
 
   void _incrementCounter() {
     setState(() {
@@ -117,10 +119,18 @@ class _MyHomePageState extends State<MyHomePage> {
             type: MaterialType.transparency,
             child: const SizedBox(width: 100.0, height: 100.0),
           ),
+          Card(
+            child: Container(
+              key: Key('2-18'),
+            ),
+          ),
         ],
       )),
       floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
+        onPressed: () async {
+          await Navigator.of(context)
+              .push(MaterialPageRoute(builder: (context) => MyOtherPage()));
+        },
         tooltip: 'Increment',
         child: Icon(Icons.add),
       ), // This trailing comma makes auto-formatting nicer for build methods.
@@ -129,6 +139,86 @@ class _MyHomePageState extends State<MyHomePage> {
         type: MaterialType.transparency,
         //child: const SizedBox(width: 100.0, height: 100.0),
         clipBehavior: Clip.hardEdge,
+      ),
+    );
+  }
+}
+
+//Exemplo abaixo retirado de: https://github.com/flutter/flutter/blob/de884f1afe1daa12def5ecaa08ab03e6af406d39/packages/flutter/test/cupertino/scaffold_test.dart
+//Para estudar o teste isOffstage
+class MyOtherPage extends StatelessWidget {
+  MyOtherPage({Key key}) : super(key: key);
+
+  // This widget is the home page of your application. It is stateful, meaning
+  // that it has a State object (defined below) that contains fields that affect
+  // how it looks.
+
+  // This class is the configuration for the state. It holds the values (in this
+  // case the title) provided by the parent (in this case the App widget) and
+  // used by the build method of the State. Fields in a Widget subclass are
+  // always marked "final".
+  @override
+  Widget build(BuildContext context) {
+    // This method is rerun every time setState is called, for instance as done
+    // by the _incrementCounter method above.
+    //
+    // The Flutter framework has been optimized to make rerunning build methods
+    // fast, so that you can just rebuild anything that needs updating rather
+    // than having to individually change instances of widgets.
+    return Scaffold(
+      appBar: AppBar(),
+      body: CupertinoTabScaffold(
+        tabBar: CupertinoTabBar(
+          items: <BottomNavigationBarItem>[
+            BottomNavigationBarItem(
+              icon: Icon(Icons.water_damage),
+              label: 'Tab 1',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.home),
+              label: 'Tab 2',
+            ),
+          ],
+        ),
+        tabBuilder: (context, index) {
+          // For 1-indexed readability.
+          ++index;
+          return CupertinoTabView(
+            builder: (BuildContext context) {
+              return CupertinoPageScaffold(
+                navigationBar: CupertinoNavigationBar(
+                  middle: Text('Page 1 of tab $index'),
+                ),
+                child: Center(
+                  child: CupertinoButton(
+                    child: const Text('Next'),
+                    onPressed: () {
+                      Navigator.of(context).push(
+                        CupertinoPageRoute<void>(
+                          builder: (BuildContext context) {
+                            return CupertinoPageScaffold(
+                              navigationBar: CupertinoNavigationBar(
+                                middle: Text('Page 2 of tab $index'),
+                              ),
+                              child: Center(
+                                child: CupertinoButton(
+                                  child: const Text('Back'),
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                      );
+                    },
+                  ),
+                ),
+              );
+            },
+          );
+        },
       ),
     );
   }
