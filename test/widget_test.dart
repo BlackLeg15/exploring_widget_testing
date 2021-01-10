@@ -122,7 +122,7 @@ void main() {
     expect('Não vazio', isNotEmpty); //2-27
     expect(find.byType(Tooltip), isNotInCard); //2-28
     expect(2.29, isNotNaN); //2-29
-    expect({'name': 'Adby'}['name'], isNotNull); //2-30 */
+    expect({'name': 'Adby'}['name'], isNotNull); //2-30 
     expect({'name': null}['name'], isNull); //2-31
 
     expect(await tester.runAsync<int>(() async => throw null), isNull);
@@ -143,12 +143,84 @@ void main() {
     expect(find.text('Page 2 of tab 2'), isOnstage); //2-34
     expect(find.text('Page 1 of tab 1', skipOffstage: false), isOffstage); //2-33
 
-    await tester.pageBack();
+    /*Precisa do Scaffold para aparecer o botão de voltar
+    Não poderia ter somente a CupertinoTabBar para usar*/
+    await tester.pageBack(); 
     await tester.pump(); //2-33 e 2-34 */
 
     expect(-1 + 1.1, isPositive); //2-35
+
+    expect(
+        await tester.runAsync<int>(() async => testForArgumentOrRangeError()),
+        isNull);
+    expect(tester.takeException(), isRangeError); //2-36
+
+    expect(StateError("state error"), isStateError); //2-37
     expect(1 == 1.0, isTrue); //2-38
+
+    expect(
+        await tester
+            .runAsync<StackTrace>(() async => TestingErrors().stackTrace),
+        isNull);
+    expect(tester.takeException(), isUnimplementedError); //2-39
+
+    expect(
+        await tester.runAsync<StackTrace>(
+            () async => throw UnsupportedError("unsupported error")),
+        isNull);
+    expect(tester.takeException(), isUnsupportedError); //2-40
+
     expect(0, isZero); //2-41
+    expect(() => true, returnsNormally); //2-42
+    expect(() => throw ArgumentError(), throwsA(isA<ArgumentError>())); //2-43
+
+    //É possível substituir todos os throws etcetc por throwsA(isA<etcetc>)
+    expect(() => throw ArgumentError(), throwsArgumentError); //2-44
+    expect(() => throw ConcurrentModificationError(),
+        throwsConcurrentModificationError); //2-45
+    expect(() => throw CyclicInitializationError(),
+        throwsCyclicInitializationError); //2-46
+    expect(() => throw Exception(), throwsException); //2-47
+    expect(() => throw FormatException(), throwsFormatException); //2-48
+    expect(() => ('' as dynamic).toInt(), throwsNoSuchMethodError); //2-49
+    expect(() => throw NullThrownError(), throwsNullThrownError); //2-50
+    expect(() => throw RangeError('range errror'), throwsRangeError); //2-51
+    expect(() => throw StateError('state error'), throwsStateError); //2-52
+    expect(() => TestingErrors().stackTrace, throwsUnimplementedError); //2-53
+    expect(() => throw UnsupportedError('unsupported error'),
+        throwsUnsupportedError); //2-54 */
+
+    //3 - # WidgetTester functions
+    //3-1
+    /*final Ticker ticker = tester.createTicker((Duration duration) {
+      print(5);
+    });
+    ticker.start();
+    ticker.dispose();
+    //tester.verifyTickersWereDisposed(''); */
+
+    //3-2 TODO
+    //tester.dispatchEvent(PointerDownEvent(), HitTestResult()..add();
+
+    //3-3
+    await tester.enterText(find.byKey(Key('3-3')), 'teste 3-3');
+
+    //3-4
+    await tester.getRestorationData();
+    //Precisa colocar RootRestorationScope como pai da árvore (e.g. home: Root...)
+
+    //3-5 TODO
+    //tester.handlePointerEventRecord(records)
+
+    //3-5
+    print(tester.any(find.text('3-5'))); //false
+
+    //3-6
+    await tester
+        .tapAt(Offset(0, 100)); //Offset inicia do lado superior esquerdo
+
+    //3-7
+    print(tester.binding.clock.now());
 
     // Tap the '+' icon and trigger a frame.
     //await tester.tap(find.byIcon(Icons.add)); //1-4,
@@ -161,7 +233,7 @@ void main() {
   });
 }
 
-int testForArgumentError() {
+int testForArgumentOrRangeError() {
   final list = <int>[1, 2];
   return list[2];
 }
@@ -175,8 +247,13 @@ int testForConcurrentModificationError() => throw ConcurrentModificationError();
 int testForException() => (1 ~/ 0);
 DateTime testForFormatException() => DateTime.parse('formato, incorreto');
 
+class TestingErrors implements Error {
+  @override
+  StackTrace get stackTrace => throw UnimplementedError();
+}
+
 /* 
-1 - # Common Finders (ou qualquer parâmetro do tipo Finder usado acima)
+1 - # Common Finders (e.g. qualquer parâmetro do tipo Finder usado acima)
 
 #
 1 ancestor
@@ -242,21 +319,33 @@ DateTime testForFormatException() => DateTime.parse('formato, incorreto');
 35 isPositive
 36 isRangeError
 37 isStateError
+    Doc: https://api.flutter.dev/flutter/dart-core/StateError-class.html
+    Exemplo de uso: https://github.com/flutter/flutter/blob/b3bd9e6924cd423baba92a6ddc35db1542ed0f30/packages/flutter/test/painting/image_provider_test.dart
 38 isTrue
 39 isUnimplementedError
 40 isUnsupportedError
 41 isZero
-returnsNormally
-throws
-throwsArgumentError
-throwsConcurrentModificationError
-throwsCyclicInitializationError
-throwsException
-throwsFormatException
-throwsNoSuchMethodError
-throwsNullThrownError
-throwsRangeError
-throwsStateError
-throwsUnimplementedError
-throwsUnsupportedErr
+42 returnsNormally
+43 throws (deprecated) 
+    -> throwsA(isA<ArgumentError>)
+44 throwsArgumentError
+45 throwsConcurrentModificationError
+46 throwsCyclicInitializationError
+47 throwsException
+48 throwsFormatException
+49 throwsNoSuchMethodError
+50 throwsNullThrownError
+51 throwsRangeError
+52 throwsStateError
+53 throwsUnimplementedError
+54 throwsUnsupportedError
+*/
+
+/*
+3 - WidgetTester functions
+
+1 createTicker
+    Exemplo: https://github.com/flutter/flutter/blob/8998167d0fafb5b4e6b9ea2b3535c740db131602/packages/flutter_test/test/widget_tester_test.dart
+
+// SOON
 */
