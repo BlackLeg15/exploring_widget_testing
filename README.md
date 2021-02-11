@@ -1,7 +1,7 @@
 # studying_widget_test
 
-Repository created to do some kind of exploration in the flutter widget testing libs.
-Be free to take a look at the file test/widget_test.dart
+Repository created to do some kind of exploration in the flutter widget testing libs\n
+Be free to take a look at the file test/widget_test.dart\n
 The lib/main.dart file will only make sense if you do it.
 
 ## Getting Started
