@@ -240,7 +240,7 @@ int testForArgumentOrRangeError() {
 
 List<String> testForCastError() {
   final list = <int>[1, 2];
-  return list.map((e) => e - 1).cast<String>();
+  return list.map((e) => e - 1).cast<String>().toList();
 }
 
 int testForConcurrentModificationError() => throw ConcurrentModificationError();
