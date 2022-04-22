@@ -229,7 +229,7 @@ void main() {
     // Verify that our counter has incremented.
     //expect(find.text('0'), findsNothing); //1-2, 2-3
 
-    expect(find.text('0'), findsOneWidget); //1-2, 2-4
+    //expect(find.text('0'), findsOneWidget); //1-2, 2-4
   });
 }
 
